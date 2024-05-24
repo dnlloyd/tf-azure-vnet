@@ -2,22 +2,23 @@ resource "azurerm_virtual_network" "this" {
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
 
-  name                = "Transit"  # TODO: rename to BU-Transit
-  
-  address_space       = [var.vnet_address_space]
-  tags                = var.tags
+  name          = var.name
+  address_space = [var.vnet_address_space]
+  tags          = var.tags
 }
 
 # Public
 resource "azurerm_subnet" "public" {
+  count               = var.public_subnet_prefixes == null ? 0 : 1
   resource_group_name = var.resource_group_name
-  
+
   name                 = "Public"
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = var.public_subnet_prefixes
 }
 
 resource "azurerm_route_table" "public" {
+  count               = var.public_subnet_prefixes == null ? 0 : 1
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
@@ -38,22 +39,24 @@ resource "azurerm_route_table" "public" {
 }
 
 resource "azurerm_subnet_route_table_association" "public" {
-  route_table_id = azurerm_route_table.public.id
-  subnet_id      = azurerm_subnet.public.id
+  count = var.public_subnet_prefixes == null ? 0 : 1
+
+  route_table_id = azurerm_route_table.public[0].id
+  subnet_id      = azurerm_subnet.public[0].id
 }
 
 # Private
 resource "azurerm_subnet" "private" {
-  resource_group_name  = var.resource_group_name
-  
+  resource_group_name = var.resource_group_name
+
   name                 = "Private"
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = var.private_subnet_prefixes
 }
 
 resource "azurerm_route_table" "private" {
-  location                      = var.resource_group_location
-  resource_group_name           = var.resource_group_name
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
 
   name = "private"
   tags = var.tags
@@ -75,15 +78,15 @@ resource "azurerm_public_ip" "nat_gw" {
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
-  name                = "NAT-Gateway"
-  allocation_method   = "Static"
-  sku                 = "Standard"
-  zones               = ["1"]
+  name              = "NAT-Gateway"
+  allocation_method = "Static"
+  sku               = "Standard"
+  zones             = ["1"]
 }
 
 resource "azurerm_nat_gateway" "this" {
-  location                = var.resource_group_location
-  resource_group_name     = var.resource_group_name
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
 
   name                    = "NAT-Gateway"
   sku_name                = "Standard"
@@ -99,8 +102,4 @@ resource "azurerm_nat_gateway_public_ip_association" "transit_private" {
 resource "azurerm_subnet_nat_gateway_association" "transit_private" {
   subnet_id      = azurerm_subnet.private.id
   nat_gateway_id = azurerm_nat_gateway.this.id
-}
-
-output "private_subnet_id" {
-  value = azurerm_subnet.private.id
 }
