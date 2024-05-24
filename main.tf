@@ -1,7 +1,3 @@
-# data "azurerm_resource_group" "this" {
-#   name = var.resource_group_name
-# }
-
 resource "azurerm_virtual_network" "this" {
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
@@ -103,4 +99,8 @@ resource "azurerm_nat_gateway_public_ip_association" "transit_private" {
 resource "azurerm_subnet_nat_gateway_association" "transit_private" {
   subnet_id      = azurerm_subnet.private.id
   nat_gateway_id = azurerm_nat_gateway.this.id
+}
+
+output "private_subnet_id" {
+  value = azurerm_subnet.private.id
 }
