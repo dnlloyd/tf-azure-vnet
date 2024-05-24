@@ -1,21 +1,21 @@
 resource "azurerm_network_interface" "bu_tf_testing" {
   name                = "bu-tf-testing"
-  location            = azurerm_resource_group.bu_tf_testing_transit_vnet.location
-  resource_group_name = azurerm_resource_group.bu_tf_testing_transit_vnet.name
+  location            = data.azurerm_resource_group.this.location
+  resource_group_name = var.resource_group_name
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.transit_private.id
+    subnet_id                     = azurerm_subnet.private.id
     private_ip_address_allocation = "Dynamic"
   }
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "azurerm_linux_virtual_machine" "bu_tf_testing" {
   name                = "bu-tf-testing"
-  resource_group_name = azurerm_resource_group.bu_tf_testing_transit_vnet.name
-  location            = azurerm_resource_group.bu_tf_testing_transit_vnet.location
+  resource_group_name = var.resource_group_name
+  location            = data.azurerm_resource_group.this.location
 
   size                = "Standard_F2"
   admin_username      = "adminuser"
@@ -41,27 +41,27 @@ resource "azurerm_linux_virtual_machine" "bu_tf_testing" {
     version   = "latest"
   }
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "azurerm_network_interface" "bu_tf_testing_2" {
   name                = "bu-tf-testing-2"
-  location            = azurerm_resource_group.bu_tf_testing_transit_vnet.location
-  resource_group_name = azurerm_resource_group.bu_tf_testing_transit_vnet.name
+  location            = data.azurerm_resource_group.this.location
+  resource_group_name = var.resource_group_name
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.transit_private.id
+    subnet_id                     = azurerm_subnet.private.id
     private_ip_address_allocation = "Dynamic"
   }
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "azurerm_linux_virtual_machine" "bu_tf_testing_2" {
   name                = "bu-tf-testing-2"
-  resource_group_name = azurerm_resource_group.bu_tf_testing_transit_vnet.name
-  location            = azurerm_resource_group.bu_tf_testing_transit_vnet.location
+  resource_group_name = var.resource_group_name
+  location            = data.azurerm_resource_group.this.location
 
   size                = "Standard_F2"
   admin_username      = "adminuser"
@@ -87,7 +87,7 @@ resource "azurerm_linux_virtual_machine" "bu_tf_testing_2" {
     version   = "latest"
   }
 
-  tags = local.tags
+  tags = var.tags
 }
 
 
@@ -101,10 +101,10 @@ resource "azurerm_linux_virtual_machine" "bu_tf_testing_2" {
 
 resource "azurerm_network_security_group" "web_vms" {
   name                = "WebVMs"
-  location            = azurerm_resource_group.bu_tf_testing_transit_vnet.location
-  resource_group_name = azurerm_resource_group.bu_tf_testing_transit_vnet.name
+  location            = data.azurerm_resource_group.this.location
+  resource_group_name = var.resource_group_name
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "azurerm_network_interface_security_group_association" "web_vms" {
@@ -120,7 +120,7 @@ resource "azurerm_network_interface_security_group_association" "web_vms2" {
 resource "azurerm_network_security_rule" "web_vms_inbound_allow_all" {  # TODO: Refine
   name                        = "Inbound_Allow_Any_Any"
   network_security_group_name = azurerm_network_security_group.web_vms.name
-  resource_group_name         = azurerm_resource_group.bu_tf_testing_transit_vnet.name
+  resource_group_name         = var.resource_group_name
   
   priority                    = 100
   direction                   = "Inbound"
