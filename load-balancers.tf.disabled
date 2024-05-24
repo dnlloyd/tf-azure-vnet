@@ -1,6 +1,6 @@
 resource "azurerm_public_ip" "transit_lb" {
   name                = "PublicIPForTransitLB"
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
@@ -10,7 +10,7 @@ resource "azurerm_public_ip" "transit_lb" {
 
 resource "azurerm_lb" "transit" {
   name                = "Transit"
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
   sku                = "Standard"
 

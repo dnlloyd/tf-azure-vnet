@@ -1,10 +1,10 @@
-data "azurerm_resource_group" "this" {
-  name = var.resource_group_name
-}
+# data "azurerm_resource_group" "this" {
+#   name = var.resource_group_name
+# }
 
 resource "azurerm_virtual_network" "this" {
   resource_group_name = var.resource_group_name
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
 
   name                = "Transit"  # TODO: rename to BU-Transit
   
@@ -22,7 +22,7 @@ resource "azurerm_subnet" "public" {
 }
 
 resource "azurerm_route_table" "public" {
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
   name = "public"
@@ -56,7 +56,7 @@ resource "azurerm_subnet" "private" {
 }
 
 resource "azurerm_route_table" "private" {
-  location                      = data.azurerm_resource_group.this.location
+  location                      = var.resource_group_location
   resource_group_name           = var.resource_group_name
 
   name = "private"
@@ -76,7 +76,7 @@ resource "azurerm_subnet_route_table_association" "private" {
 
 # NAT Gateway
 resource "azurerm_public_ip" "nat_gw" {
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
   name                = "NAT-Gateway"
@@ -86,7 +86,7 @@ resource "azurerm_public_ip" "nat_gw" {
 }
 
 resource "azurerm_nat_gateway" "this" {
-  location                = data.azurerm_resource_group.this.location
+  location                = var.resource_group_location
   resource_group_name     = var.resource_group_name
 
   name                    = "NAT-Gateway"

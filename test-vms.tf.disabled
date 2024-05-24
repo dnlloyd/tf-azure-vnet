@@ -1,6 +1,6 @@
 resource "azurerm_network_interface" "bu_tf_testing" {
   name                = "bu-tf-testing"
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
   ip_configuration {
@@ -15,7 +15,7 @@ resource "azurerm_network_interface" "bu_tf_testing" {
 resource "azurerm_linux_virtual_machine" "bu_tf_testing" {
   name                = "bu-tf-testing"
   resource_group_name = var.resource_group_name
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
 
   size                = "Standard_F2"
   admin_username      = "adminuser"
@@ -46,7 +46,7 @@ resource "azurerm_linux_virtual_machine" "bu_tf_testing" {
 
 resource "azurerm_network_interface" "bu_tf_testing_2" {
   name                = "bu-tf-testing-2"
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
   ip_configuration {
@@ -61,7 +61,7 @@ resource "azurerm_network_interface" "bu_tf_testing_2" {
 resource "azurerm_linux_virtual_machine" "bu_tf_testing_2" {
   name                = "bu-tf-testing-2"
   resource_group_name = var.resource_group_name
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
 
   size                = "Standard_F2"
   admin_username      = "adminuser"
@@ -101,7 +101,7 @@ resource "azurerm_linux_virtual_machine" "bu_tf_testing_2" {
 
 resource "azurerm_network_security_group" "web_vms" {
   name                = "WebVMs"
-  location            = data.azurerm_resource_group.this.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
   tags = var.tags
