@@ -1,8 +1,16 @@
 # tf-azure-vnet
 
-A module to create Azure VNets. 
+A module to create Azure VNets.
 
 This module can also create an optional bastion host.
+
+## Public subnets
+
+Uses default access to the internet
+
+## Private subnets
+
+Configures [private subnet](https://azure.microsoft.com/en-us/updates/public-preview-private-subnet/) which disables [default outbound access](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access).
 
 ## Provider auth
 
@@ -26,6 +34,12 @@ https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-
 Helpful in connecting to VMs in private networks
 
 https://dev.to/holger/test-azure-bastion-deployment-via-terraform-18o8
+
+### Virtual networks
+
+A VNet contains one or more public or private IP address ranges that you can then divide into subnets (/29 or larger). VNet IP address space, both public and private, is reachable only within the VNet or through services connected to the VNet, such as a VPN.
+
+Although VNets do not contain publicly routable IP addresses, you can associate resources within a VNet with a publicly routable IP address. You can map public IP addresses to internal IP addresses using a one-to-one assignment, and Azure networking automatically translates the IP addressing of the network flow as it enters and leaves the VNet. 
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -73,7 +87,7 @@ No modules.
 | <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | n/a | `any` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | n/a | `any` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `any` | n/a | yes |
-| <a name="input_transit_bastion_subnet_prefixes"></a> [transit\_bastion\_subnet\_prefixes](#input\_transit\_bastion\_subnet\_prefixes) | The address prefixes for the Azure Bastion subnet. If null, no Azure Bastion will be deployed. | `any` | `null` | no |
+| <a name="input_bastion_subnet_prefixes"></a> [transit\_bastion\_subnet\_prefixes](#input\_transit\_bastion\_subnet\_prefixes) | The address prefixes for the Azure Bastion subnet. If null, no Azure Bastion will be deployed. | `any` | `null` | no |
 | <a name="input_vnet_address_space"></a> [vnet\_address\_space](#input\_vnet\_address\_space) | n/a | `any` | n/a | yes |
 
 ## Outputs

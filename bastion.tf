@@ -1,14 +1,14 @@
 resource "azurerm_subnet" "bastion" {
-  count               = var.transit_bastion_subnet_prefixes == null ? 0 : 1
+  count               = var.bastion_subnet_prefixes == null ? 0 : 1
   resource_group_name = var.resource_group_name
 
   name                 = "AzureBastionSubnet"
   virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = var.transit_bastion_subnet_prefixes
+  address_prefixes     = var.bastion_subnet_prefixes
 }
 
 resource "azurerm_public_ip" "bastion" {
-  count               = var.transit_bastion_subnet_prefixes == null ? 0 : 1
+  count               = var.bastion_subnet_prefixes == null ? 0 : 1
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
@@ -19,7 +19,7 @@ resource "azurerm_public_ip" "bastion" {
 }
 
 resource "azurerm_bastion_host" "this" {
-  count               = var.transit_bastion_subnet_prefixes == null ? 0 : 1
+  count               = var.bastion_subnet_prefixes == null ? 0 : 1
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 

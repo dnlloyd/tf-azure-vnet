@@ -13,7 +13,7 @@ variable "public_subnet_prefixes" {
 
 variable "private_subnet_prefixes" {}
 
-variable "transit_bastion_subnet_prefixes" {
+variable "bastion_subnet_prefixes" {
   description = "The address prefixes for the Azure Bastion subnet. If null, no Azure Bastion will be deployed."
   default     = null
 }
