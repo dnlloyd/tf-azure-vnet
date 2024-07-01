@@ -24,7 +24,7 @@ resource "azurerm_linux_virtual_machine" "transit_web_01" {
   tags           = local.tags
 
   network_interface_ids = [
-    azurerm_network_interface.transit_web_01.id,
+    azurerm_network_interface.pa_fw_01.id,
   ]
 
   admin_ssh_key {
@@ -100,7 +100,7 @@ resource "azurerm_network_security_group" "web_vms" {
 }
 
 resource "azurerm_network_interface_security_group_association" "web_vms" {
-  network_interface_id      = azurerm_network_interface.transit_web_01.id
+  network_interface_id      = azurerm_network_interface.pa_fw_01.id
   network_security_group_id = azurerm_network_security_group.web_vms.id
 }
 
